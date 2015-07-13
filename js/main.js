@@ -4,6 +4,13 @@ var params, two, hexagons
 init();
 
 function init(){
+	// document.onmousemove = (function(e){document.getElementById('clipText').x.baseVal[0].value = e.clientX})
+	var clipText = document.getElementById('clipText')
+	// var textContainer = document.getElementById('text')
+	// textContainer.width.baseVal.value = window.innerWidth
+	// textContainer.height.baseVal.value = window.innerHeight
+	clipText.y.baseVal[0].value = 200
+
 	if(hexInterval)
 		clearInterval(hexInterval)
 
@@ -18,17 +25,23 @@ function init(){
 	var sl = Math.log(Math.max(params.width, params.height)) * 5
 
 	addHexagon(sl, x, y)
+	// recursiveAdd(hexagons[0].hexagon, true)
 	recursiveAdd(hexagons[0].hexagon, false)
-
 	hexInterval = setInterval(function(){
 		var length = hexagons.length
 		hexagons.forEach(function(el){
 			recursiveAdd(el.hexagon)
 		})
 		
-		if(hexagons.length - length == 0)
+		if(hexagons.length - length == 0){
 			clearInterval(hexInterval)
-	}, 1000)
+			done()
+		}
+	}, 500)
+
+}
+
+function done(){
 
 }
 
@@ -131,7 +144,7 @@ function recursiveAdd(hexagon, repeat){
 
 	if(recursiveHexagons.length != 0 && repeat){
 		recursiveHexagons.forEach(function(el){
-			recursiveAdd(el)
+			recursiveAdd(el, true)
 		})
 	}
 	two.update()

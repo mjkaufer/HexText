@@ -26,3 +26,8 @@ a:hover, a:active {
 	color: #16a085;
 	font-weight: bold;
 }
+
+
+#two-output svg{
+	/*clip-path: url(#name);*/
+}

@@ -1,2 +1,2 @@
 # Hex
-Playing with TwoJS, TinyColor, and hexagonal layouts
+Playing with TwoJS, TinyColor, SVG clip-paths, and hexagonal layouts
