@@ -1,24 +1,36 @@
-var elem = document.getElementById('two-output');
-var params = { width: window.innerWidth, height: window.innerHeight };
-var two = new Two(params).appendTo(elem);
+var hexInterval;
+var params, two, hexagons
 
-var hexagons = []
-var x = params.width / 2
-var y = params.height / 2
-var sl = Math.log(Math.max(params.width, params.height)) * 5
+init();
 
-addHexagon(sl, x, y)
-recursiveAdd(hexagons[0].hexagon, false)
-
-var hexInterval = setInterval(function(){
-	var length = hexagons.length
-	hexagons.forEach(function(el){
-		recursiveAdd(el.hexagon)
-	})
-	
-	if(hexagons.length - length == 0)
+function init(){
+	if(hexInterval)
 		clearInterval(hexInterval)
-}, 1000)
+
+	var elem = document.getElementById('two-output');
+	elem.innerHTML = "";
+	params = { width: window.innerWidth, height: window.innerHeight };
+	two = new Two(params).appendTo(elem);
+
+	hexagons = []
+	var x = params.width / 2
+	var y = params.height / 2
+	var sl = Math.log(Math.max(params.width, params.height)) * 5
+
+	addHexagon(sl, x, y)
+	recursiveAdd(hexagons[0].hexagon, false)
+
+	hexInterval = setInterval(function(){
+		var length = hexagons.length
+		hexagons.forEach(function(el){
+			recursiveAdd(el.hexagon)
+		})
+		
+		if(hexagons.length - length == 0)
+			clearInterval(hexInterval)
+	}, 1000)
+
+}
 
 function makeParallelogram(sideLength, startAngle){
 
@@ -77,11 +89,8 @@ function neighborHexagon(sideLength, startX, startY, angle){
 }
 
 function addHexagon(sideLength, startX, startY){
-	if(offGrid(sideLength, startX, startY)){
-		console.log("OFF")
-		console.log(sideLength, startX, startY)
+	if(offGrid(sideLength, startX, startY))
 		return false
-	}
 
 	for(var i = 0; i < hexagons.length; i++){
 		var hexagon = hexagons[i]
@@ -127,4 +136,8 @@ function recursiveAdd(hexagon, repeat){
 	}
 	two.update()
 	return recursiveHexagons
+}
+
+window.onresize = function(){
+	init()
 }

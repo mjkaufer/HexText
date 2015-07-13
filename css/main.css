@@ -1,3 +1,27 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:700,400);
+
 body{
 	margin: 0;
+	font-family: 'Open Sans', 'Arial', sans-serif;
+}
+
+#info{
+	bottom: 0;
+	margin: 0.5rem;
+	padding: 0.25rem;
+	position: absolute;
+	border: solid rgba(255, 255, 255, 0.5) 2px;
+	background: rgba(255, 255, 255, 0.5);
+	text-align: center;
+}
+
+
+a:link, a:visited{
+	color: #2980b9;
+	font-weight: bold;
+}
+
+a:hover, a:active {
+	color: #16a085;
+	font-weight: bold;
 }
