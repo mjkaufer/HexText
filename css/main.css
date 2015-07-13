@@ -3,6 +3,7 @@
 body{
 	margin: 0;
 	font-family: 'Open Sans', 'Arial', sans-serif;
+	overflow: hidden;
 }
 
 #info{

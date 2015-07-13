@@ -41,7 +41,7 @@ function makeParallelogram(sideLength, startAngle){
 	Makes a parallelogram like that above, with the origin being the bottom middle vertex
 	*/
 
-	var vertices = []
+	var vertices = [];
 
 	vertices.push(new Two.Anchor(0, 0))
 	for(var deg = startAngle; deg <= startAngle + 120; deg += 60){
