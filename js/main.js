@@ -3,10 +3,10 @@ var params = { width: window.innerWidth, height: window.innerHeight };
 var hexagons = []
 var hexInterval
 var s = Snap(params.width, params.height)
-
 init()
 
 function init(){
+	params = { width: window.innerWidth, height: window.innerHeight };
 	s.clear()
 	hexagons = []
 
@@ -147,3 +147,5 @@ function recursiveAdd(hexagon, repeat){
 	
 	return recursiveHexagons
 }
+
+window.onresize = init
