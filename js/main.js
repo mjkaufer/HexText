@@ -82,10 +82,6 @@ function init(){
 		"maskUnits": "userSpaceOnUse",
 		"maskContentUnits": "userSpaceOnUse"
 	})
-
-	if(Math.random() < 0.5)
-		toggle()
-
 }
 
 function makeParallelogram(sideLength, startAngle, attr){
