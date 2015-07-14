@@ -87,15 +87,17 @@ function init(){
 		"maskUnits": "userSpaceOnUse",
 		"maskContentUnits": "userSpaceOnUse"
 	})
-	
+	filter = s.filter(Snap.filter.hueRotate(value))
+	shapeGroup.attr({filter: filter})
+
 	updateFilter(0)
 }
 
 function updateFilter(value){
-	filter.remove()
-	// filter = s.filter(Snap.filter.grayscale(value))
-	filter = s.filter(Snap.filter.hueRotate(value))
-	shapeGroup.attr({filter: filter})
+	
+	
+	Snap(filter.node.children[0]).attr("values",value)
+	
 }
 
 function makeParallelogram(sideLength, startAngle, attr){
