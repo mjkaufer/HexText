@@ -12,6 +12,7 @@ var isMasked = false
 var time = 0;
 var mag = 7
 var period = 25
+var filter = s.filter(Snap.filter.grayscale(0))
 init()
 wiggle(time)
 
@@ -39,6 +40,10 @@ function init(){
 
 	addHexagon(sl, x, y)
 	recursiveAdd(hexagons[0], true)
+
+
+	
+
 
 	text = s.text(0, 0, "@mjkaufer")
 
@@ -82,6 +87,15 @@ function init(){
 		"maskUnits": "userSpaceOnUse",
 		"maskContentUnits": "userSpaceOnUse"
 	})
+	
+	updateFilter(0)
+}
+
+function updateFilter(value){
+	filter.remove()
+	// filter = s.filter(Snap.filter.grayscale(value))
+	filter = s.filter(Snap.filter.hueRotate(value))
+	shapeGroup.attr({filter: filter})
 }
 
 function makeParallelogram(sideLength, startAngle, attr){
@@ -210,6 +224,20 @@ function wiggle(time){
 	var moveMatrix = new Snap.Matrix()
 	moveMatrix.translate(mag * Math.cos(time / period), mag * Math.sin(time / period))
 	shapeGroupContents.transform(moveMatrix)
+	// var v = Math.sin(time / period);
+
+	// updateFilter(v * v * Math.sign(v))
+	updateFilter(time % 360)
+
+	// hexagons.forEach(function(e){
+	// 	e.children().forEach(function(p){
+	// 		p.attr("fill",
+	// 			tinycolor(p.attr("fill")).spin(29).toString()
+	// 		)
+	// 	})
+	// })
+
+
 	window.requestAnimationFrame(function(){wiggle(++time)})
 }
 
