@@ -25,7 +25,6 @@ function init(){
 		
 		if(hexagons.length - length == 0){
 			clearInterval(hexInterval)
-			done()
 		}
 	}, 500)
 
