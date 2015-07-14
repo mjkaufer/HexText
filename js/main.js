@@ -74,7 +74,8 @@ function addHexagon(sideLength, startX, startY){
 	var hexagon = s.g();
 
 	for(var i = 30; i <= 270; i+= 120){
-		hexagon.add(makeParallelogram(sideLength, i, {fill: randomColor()}))
+		var parallelogram = makeParallelogram(sideLength, i, {fill: randomColor()})
+		hexagon.add(parallelogram)
 	}
 
 	hexagon.x = startX
@@ -149,3 +150,15 @@ function recursiveAdd(hexagon, repeat){
 }
 
 window.onresize = init
+
+document.body.onclick = function(){
+	for(var i = 0; i < hexagons.length; i++){
+		var hexagon = hexagons[i]
+		var children = hexagon.children()
+		for(var j = 0; j < children.length; j++){
+			var parallelogram = children[j]
+			parallelogram.attr("fill", randomColor())
+
+		}
+	}
+}
