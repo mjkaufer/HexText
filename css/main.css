@@ -28,3 +28,7 @@ a:hover, a:active {
 	color: #16a085;
 	font-weight: bold;
 }
+
+svg{
+	position: relative;
+}

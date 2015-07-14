@@ -41,31 +41,38 @@ function init(){
 	addHexagon(sl, x, y)
 	recursiveAdd(hexagons[0], true)
 
-
-	// sc.attr({filter: s.filter(Snap.filter.sepia(1))})
-
-	// console.log(sc.attr("mask"))
-
-	// var clipGroup = s.g()
-
-
 	text = s.text(0, 0, "@mjkaufer")
 
 
 	text.attr({
 		"font-family": "Leckerli One",
-		"font-size": "15rem",
+		// "font-size": "15rem",
 		"font-style": "italic",
 		"font-weight": "700",
 		"fill": "#fff"
 	})
 
+
+
+
 	var textBox = text.getBBox()
 
+	var widthTransform = params.width / textBox.width * 0.8;
+	var heightTransform = params.height / textBox.height * 0.8;
+	var value = widthTransform < heightTransform ? widthTransform : heightTransform;
+
+
 	var textMatrix = new Snap.Matrix()
-	textMatrix.translate((params.width - textBox.width) / 2, (params.height + textBox.height / 2) / 2)
+	textMatrix.translate((params.width / 2), (params.height / 2))
+
+	textMatrix.scale(value)
 
 	text.transform(textMatrix)
+
+	text.attr({
+		"text-anchor": "middle",
+		"dominant-baseline": "middle"
+	})
 
 	mask = s.mask()
 
@@ -82,8 +89,8 @@ function init(){
 
 
 
-	if(Math.random() < 0.5)
-		toggle()
+	// if(Math.random() < 0.5)
+	// 	toggle()
 
 }
 
