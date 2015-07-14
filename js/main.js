@@ -4,6 +4,8 @@ var hexagons = []
 var hexInterval
 var s = Snap(params.width, params.height)
 
+init()
+
 function init(){
 	s.clear()
 	hexagons = []
