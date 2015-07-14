@@ -4,23 +4,35 @@ var hexagons = []
 var hexInterval
 var s = Snap(params.width, params.height)
 var shapeGroup = s.g()
+var shapeGroupContents = s.g()
 var count = 0;
 var text
 var mask
 var isMasked = false
+var time = 0;
+var mag = 7
+var period = 50
 init()
 
 function init(){
 
 
 	params = { width: window.innerWidth, height: window.innerHeight };
-	s.clear()
+	shapeGroupContents.clear()
 	shapeGroup.clear()
+
+	s.clear()
+	s.attr({
+		"width": params.width,
+		"height": params.height
+	})
+
+	shapeGroup.add(shapeGroupContents)
 	s.add(shapeGroup)
 
-
-
 	hexagons = []
+
+	console.log(hexagons, s.children(), shapeGroup.children())
 
 	var x = params.width / 2
 	var y = params.height / 2
@@ -28,6 +40,11 @@ function init(){
 
 	addHexagon(sl, x, y)
 	recursiveAdd(hexagons[0], true)
+
+
+	// sc.attr({filter: s.filter(Snap.filter.sepia(1))})
+
+	// console.log(sc.attr("mask"))
 
 	// var clipGroup = s.g()
 
@@ -54,8 +71,14 @@ function init(){
 
 	mask.add(text.clone())
 
+
 	shapeGroup.attr("mask", mask)
-	mask.attr("display", "none")
+	mask.attr({
+		"display": "none",
+		"maskUnits": "userSpaceOnUse",
+		"maskContentUnits": "userSpaceOnUse"
+	})
+
 
 
 
@@ -113,7 +136,7 @@ function addHexagon(sideLength, startX, startY){
 			return false
 	}
 
-	var hexagon = shapeGroup.g();
+	var hexagon = shapeGroupContents.g();
 
 	for(var i = 30; i <= 270; i+= 120){
 		var parallelogram = makeParallelogram(sideLength, i, {fill: randomColor()})
@@ -145,7 +168,7 @@ function neighborHexagonCoords(sideLength, startX, startY, angle){
 
 function offGrid(sideLength, x, y){
 
-	return x + sideLength < 0 || x - sideLength > params.width || y + sideLength < 0 || y - sideLength > params.height
+	return x + sideLength + mag < 0 || x - sideLength - mag > params.width || y + sideLength + mag < 0 || y - sideLength - mag > params.height
 
 }
 
@@ -243,8 +266,16 @@ window.onclick = function(){
 	// 		parallelogram.attr("fill", randomColor())
 
 	// 	}
-	// }
+	// }`
 }
+
+function wiggle(time){
+	var moveMatrix = new Snap.Matrix()
+	moveMatrix.translate(mag * Math.cos(time / period), mag * Math.sin(time / period))
+	shapeGroupContents.transform(moveMatrix)
+}
+
+// setInterval(toggle, 1000)
 
 function toggle(){
 	if(!isMasked){
@@ -257,3 +288,7 @@ function toggle(){
 	
 	isMasked = !isMasked
 }
+
+setInterval(function(){
+	wiggle(time++)
+})
