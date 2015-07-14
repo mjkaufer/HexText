@@ -3,11 +3,23 @@ var params = { width: window.innerWidth, height: window.innerHeight };
 var hexagons = []
 var hexInterval
 var s = Snap(params.width, params.height)
+var shapeGroup = s.g()
+var count = 0;
+var text
+var mask
+var isMasked = false
 init()
 
 function init(){
+
+
 	params = { width: window.innerWidth, height: window.innerHeight };
 	s.clear()
+	shapeGroup.clear()
+	s.add(shapeGroup)
+
+
+
 	hexagons = []
 
 	var x = params.width / 2
@@ -15,18 +27,49 @@ function init(){
 	var sl = Math.log(Math.max(params.width, params.height)) * 5
 
 	addHexagon(sl, x, y)
-	// recursiveAdd(hexagons[0], true)
-	recursiveAdd(hexagons[0], false)
-	hexInterval = setInterval(function(){
-		var length = hexagons.length
-		hexagons.forEach(function(hexagon){
-			recursiveAdd(hexagon)
-		})
+	recursiveAdd(hexagons[0], true)
+
+	// var clipGroup = s.g()
+
+
+	text = s.text(0, 0, "@mjkaufer")
+
+
+	text.attr({
+		"font-family": "Leckerli One",
+		"font-size": "15rem",
+		"font-style": "italic",
+		"font-weight": "700",
+		"fill": "#fff"
+	})
+
+	var textBox = text.getBBox()
+
+	var textMatrix = new Snap.Matrix()
+	textMatrix.translate((params.width - textBox.width) / 2, (params.height + textBox.height / 2) / 2)
+
+	text.transform(textMatrix)
+
+	mask = s.mask()
+
+	mask.add(text.clone())
+
+	shapeGroup.attr("mask", mask)
+	mask.attr("display", "none")
+
+
+
+	// recursiveAdd(hexagons[0], false)
+	// hexInterval = setInterval(function(){
+	// 	var length = hexagons.length
+	// 	hexagons.forEach(function(hexagon){
+	// 		recursiveAdd(hexagon)
+	// 	})
 		
-		if(hexagons.length - length == 0){
-			clearInterval(hexInterval)
-		}
-	}, 500)
+	// 	if(hexagons.length - length == 0){
+	// 		clearInterval(hexInterval)
+	// 	}
+	// }, 500)
 
 }
 
@@ -70,7 +113,7 @@ function addHexagon(sideLength, startX, startY){
 			return false
 	}
 
-	var hexagon = s.g();
+	var hexagon = shapeGroup.g();
 
 	for(var i = 30; i <= 270; i+= 120){
 		var parallelogram = makeParallelogram(sideLength, i, {fill: randomColor()})
@@ -148,16 +191,69 @@ function recursiveAdd(hexagon, repeat){
 	return recursiveHexagons
 }
 
-window.onresize = init
+var parallelogramShift = 1;
+var hexagonShift = 1;
 
-document.body.onclick = function(){
+function shiftColors(stationary){
 	for(var i = 0; i < hexagons.length; i++){
 		var hexagon = hexagons[i]
+		var prev = hexagons[(i + hexagonShift + hexagons.length) % hexagons.length]
+
+		var children = hexagon.children()
+		var prevChildren = prev.children()
+
+		if(stationary)
+			children[count].stagingFill = prev.children()[parallelogramShift].attr("fill")
+		else
+			children[count].stagingFill = prevChildren[(parallelogramShift + count) % prevChildren.length].attr("fill")
+
+		// for(var j = 0; j < children.length; j++){
+		// 	var parallelogram = children[j]
+		// 	var prevParallelogram = prevChildren[(j + parallelogramShift + children.length) % children.length]
+		// 	parallelogram.stagingFill = prevParallelogram.attr("fill")
+		// 	// parallelogram.attr("fill", randomColor())
+		// }
+	}
+
+	for(var i = 0; i < hexagons.length; i++){
+		var hexagon = hexagons[i]
+
 		var children = hexagon.children()
 		for(var j = 0; j < children.length; j++){
 			var parallelogram = children[j]
-			parallelogram.attr("fill", randomColor())
-
+			if(parallelogram.stagingFill)
+				parallelogram.attr("fill", parallelogram.stagingFill)
+			parallelogram.stagingFill = null
 		}
 	}
+	count++;
+	count %= hexagons[0].children().length
+}
+
+window.onresize = init
+
+window.onclick = function(){
+	// shiftColors()
+	toggle()
+	// for(var i = 0; i < hexagons.length; i++){
+	// 	var hexagon = hexagons[i]
+	// 	var children = hexagon.children()
+	// 	for(var j = 0; j < children.length; j++){
+	// 		var parallelogram = children[j]
+	// 		parallelogram.attr("fill", randomColor())
+
+	// 	}
+	// }
+}
+
+function toggle(){
+	if(!isMasked){
+		mask.attr("display", "")
+		text.attr("display", "none")
+	} else {
+		text.attr("display", "")
+		mask.attr("display", "none")
+	}
+	
+	isMasked = !isMasked
 }
