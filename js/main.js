@@ -11,8 +11,9 @@ var mask
 var isMasked = false
 var time = 0;
 var mag = 7
-var period = 50
+var period = 25
 init()
+wiggle(time)
 
 function init(){
 
@@ -63,7 +64,7 @@ function init(){
 
 
 	var textMatrix = new Snap.Matrix()
-	textMatrix.translate((params.width / 2), (params.height / 2))
+	textMatrix.translate(params.width / 2, params.height / 2)
 
 	textMatrix.scale(value)
 
@@ -71,7 +72,7 @@ function init(){
 
 	text.attr({
 		"text-anchor": "middle",
-		"dominant-baseline": "middle"
+		"dominant-baseline": "central"
 	})
 
 	mask = s.mask()
@@ -86,11 +87,8 @@ function init(){
 		"maskContentUnits": "userSpaceOnUse"
 	})
 
-
-
-
-	// if(Math.random() < 0.5)
-	// 	toggle()
+	if(Math.random() < 0.5)
+		toggle()
 
 }
 
@@ -271,9 +269,8 @@ function wiggle(time){
 	var moveMatrix = new Snap.Matrix()
 	moveMatrix.translate(mag * Math.cos(time / period), mag * Math.sin(time / period))
 	shapeGroupContents.transform(moveMatrix)
+	window.requestAnimationFrame(function(){wiggle(++time)})
 }
-
-// setInterval(toggle, 1000)
 
 function toggle(){
 	if(!isMasked){
@@ -286,7 +283,3 @@ function toggle(){
 	
 	isMasked = !isMasked
 }
-
-setInterval(function(){
-	wiggle(time++)
-})
