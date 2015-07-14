@@ -82,17 +82,8 @@ function init(){
 
 
 
-	// recursiveAdd(hexagons[0], false)
-	// hexInterval = setInterval(function(){
-	// 	var length = hexagons.length
-	// 	hexagons.forEach(function(hexagon){
-	// 		recursiveAdd(hexagon)
-	// 	})
-		
-	// 	if(hexagons.length - length == 0){
-	// 		clearInterval(hexInterval)
-	// 	}
-	// }, 500)
+	if(Math.random() < 0.5)
+		toggle()
 
 }
 
