@@ -33,8 +33,6 @@ function init(){
 
 	hexagons = []
 
-	console.log(hexagons, s.children(), shapeGroup.children())
-
 	var x = params.width / 2
 	var y = params.height / 2
 	var sl = Math.log(Math.max(params.width, params.height)) * 5
@@ -52,8 +50,6 @@ function init(){
 		"font-weight": "700",
 		"fill": "#fff"
 	})
-
-
 
 
 	var textBox = text.getBBox()
@@ -210,60 +206,9 @@ function recursiveAdd(hexagon, repeat){
 	return recursiveHexagons
 }
 
-var parallelogramShift = 1;
-var hexagonShift = 1;
-
-function shiftColors(stationary){
-	for(var i = 0; i < hexagons.length; i++){
-		var hexagon = hexagons[i]
-		var prev = hexagons[(i + hexagonShift + hexagons.length) % hexagons.length]
-
-		var children = hexagon.children()
-		var prevChildren = prev.children()
-
-		if(stationary)
-			children[count].stagingFill = prev.children()[parallelogramShift].attr("fill")
-		else
-			children[count].stagingFill = prevChildren[(parallelogramShift + count) % prevChildren.length].attr("fill")
-
-		// for(var j = 0; j < children.length; j++){
-		// 	var parallelogram = children[j]
-		// 	var prevParallelogram = prevChildren[(j + parallelogramShift + children.length) % children.length]
-		// 	parallelogram.stagingFill = prevParallelogram.attr("fill")
-		// 	// parallelogram.attr("fill", randomColor())
-		// }
-	}
-
-	for(var i = 0; i < hexagons.length; i++){
-		var hexagon = hexagons[i]
-
-		var children = hexagon.children()
-		for(var j = 0; j < children.length; j++){
-			var parallelogram = children[j]
-			if(parallelogram.stagingFill)
-				parallelogram.attr("fill", parallelogram.stagingFill)
-			parallelogram.stagingFill = null
-		}
-	}
-	count++;
-	count %= hexagons[0].children().length
-}
-
 window.onresize = init
 
-window.onclick = function(){
-	// shiftColors()
-	toggle()
-	// for(var i = 0; i < hexagons.length; i++){
-	// 	var hexagon = hexagons[i]
-	// 	var children = hexagon.children()
-	// 	for(var j = 0; j < children.length; j++){
-	// 		var parallelogram = children[j]
-	// 		parallelogram.attr("fill", randomColor())
-
-	// 	}
-	// }`
-}
+window.onclick = toggle
 
 function wiggle(time){
 	var moveMatrix = new Snap.Matrix()
